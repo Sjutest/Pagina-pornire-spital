@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programări Spital</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+    <script src="app.js" type="module"></script> <!-- Include fișierul JavaScript -->
 </head>
 <body>
 
 <div class="container">
     <h2>Formular de Programare</h2>
-    <form action="save_appointment.php" method="POST">
+    <form id="appointmentForm">
         <div class="form-group">
             <label for="name">Nume:</label>
             <input type="text" class="form-control" id="name" name="name" required>
@@ -30,19 +35,7 @@
         <div class="form-group">
             <label for="time">Ora Programării:</label>
             <select class="form-control" id="time" name="time" required>
-                <?php
-                $startHour = 8; // ora de început
-                $endHour = 19; // ora de sfârșit
-                $duration = 30; // durata programării în minute
-                $break = 5; // pauza între programări în minute
-
-                for ($hour = $startHour; $hour <= $endHour; $hour++) {
-                    for ($minute = 0; $minute < 60; $minute += $duration + $break) {
-                        $time = sprintf("%02d:%02d", $hour, $minute);
-                        echo "<option value='$time'>$time</option>";
-                    }
-                }
-                ?>
+                <!-- Opțiunile de timp generate din PHP -->
             </select>
         </div>
         <button type="submit" class="btn btn-success">Trimite Programarea</button>
