@@ -31,8 +31,13 @@
             <label for="time">Ora Programării:</label>
             <select class="form-control" id="time" name="time" required>
                 <?php
-                for ($hour = 8; $hour <= 19; $hour++) {
-                    for ($minute = 0; $minute < 60; $minute += 30) {
+                $startHour = 8; // ora de început
+                $endHour = 19; // ora de sfârșit
+                $duration = 30; // durata programării în minute
+                $break = 5; // pauza între programări în minute
+
+                for ($hour = $startHour; $hour <= $endHour; $hour++) {
+                    for ($minute = 0; $minute < 60; $minute += $duration + $break) {
                         $time = sprintf("%02d:%02d", $hour, $minute);
                         echo "<option value='$time'>$time</option>";
                     }
