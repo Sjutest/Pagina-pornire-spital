@@ -6,10 +6,10 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyDnkONLSIMBnDYgOlpmIl5a9_gN7iuWY9A",
   authDomain: "sevrer-bc029.firebaseapp.com",
-  projectId: "sevrer-bc029",
+  projectId: "sevrer -bc029",
   storageBucket: "sevrer-bc029.firebasestorage.app",
   messagingSenderId: "450436026736",
- appId: "1:450436026736:web:31fc7cb68a820f8d27ffb5",
+  appId: "1:450436026736:web:31fc7cb68a820f8d27ffb5",
   measurementId: "G-PBVMK1N35V"
 };
 
