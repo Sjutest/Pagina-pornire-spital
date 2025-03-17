@@ -22,6 +22,7 @@ async function saveAppointment(appointmentData) {
   try {
     const docRef = await addDoc(collection(db, "appointments"), appointmentData);
     console.log("Programarea a fost salvată cu ID: ", docRef.id);
+    
     // Redirecționează utilizatorul către vp.html
     window.location.href = "vp.html"; // Redirecționare
   } catch (e) {
