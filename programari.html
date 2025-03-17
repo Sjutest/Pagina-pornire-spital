@@ -3,52 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programări Spital</title>
+    <title>Spitalul nostru</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
         }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
         .container {
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .button {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
 
+<header>
+    <h1>Spitalul nostru</h1>
+    <p>Îngrijire medicală de calitate pentru toți pacienții</p>
+</header>
+
 <div class="container">
-    <h2>Formular de Programare</h2>
-    <form action="save_appointment.php" method="POST">
-        <div class="form-group">
-            <label for="name">Nume:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Telefon:</label>
-            <input type="tel" class="form-control" id="phone" name="phone" required>
-        </div>
-        <div class="form-group">
-            <label for="date">Data Programării:</label>
-            <input type="date" class="form-control" id="date" name="date" required>
-        </div>
-        <div class="form-group">
-            <label for="time">Ora Programării:</label>
-            <input type="time" class="form-control" id="time" name="time" required>
-        </div>
-        <button type="submit" class="btn btn-success">Trimite Programarea</button>
-    </form>
-    <br>
-    <a href="index.html" class="btn btn-secondary">Înapoi la Pagina Principală</a>
+    <h2>Servicii oferite</h2>
+    <p>Oferim o gamă largă de servicii medicale, inclusiv:</p>
+    <ul>
+        <li>Consultații medicale</li>
+        <li>Urgențe</li>
+        <li>Chirurgie</li>
+        <li>Laborator de analize</li>
+        <li>Radiologie</li>
+    </ul>
+
+    <h2>Informații utile</h2>
+    <p>Pentru mai multe informații, accesați secțiunile de mai jos:</p>
+    <a href="programari.html" class="btn btn-success button">Programări</a>
+    <a href="#contact" class="btn btn-primary button">Contact</a>
+    <a href="#despre-noi" class="btn btn-info button">Despre noi</a>
 </div>
+
+<footer class="text-center">
+    <p>&copy; 2023 Spitalul nostru. Toate drepturile rezervate.</p>
+</footer>
 
 </body>
 </html>
