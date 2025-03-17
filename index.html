@@ -3,60 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spitalul nostru</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .button {
-            margin: 10px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Gestionare Pacienți</title>
 </head>
 <body>
-
-<header>
-    <h1>Spitalul nostru</h1>
-    <p>Îngrijire medicală de calitate pentru toți pacienții</p>
-</header>
-
-<div class="container">
-    <h2>Servicii oferite</h2>
-    <p>Oferim o gamă largă de servicii medicale, inclusiv:</p>
-    <ul>
-        <li>Consultații medicale</li>
-        <li>Urgențe</li>
-        <li>Chirurgie</li>
-        <li>Laborator de analize</li>
-        <li>Radiologie</li>
-    </ul>
-
-    <h2>Informații utile</h2>
-    <p>Pentru mai multe informații, accesați secțiunile de mai jos:</p>
-    <a href="programari.html" class="btn btn-success button">Programări</a>
-    <a href="#contact" class="btn btn-primary button">Contact</a>
-    <a href="#despre-noi" class="btn btn-info button">Despre noi</a>
-</div>
-
-<footer class="text-center">
-    <p>&copy; 2023 Spitalul nostru. Toate drepturile rezervate.</p>
-</footer>
-
+    <header>
+        <h1>Aplicatie de Gestionare a Pacienților</h1>
+    </header>
+    <main>
+        <section id="login">
+            <h2>Autentificare</h2>
+            <form>
+                <label for="username">Nume utilizator:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Parolă:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Conectare</button>
+            </form>
+        </section>
+    </main>
+    <script src="js/script.js"></script>
 </body>
 </html>
