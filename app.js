@@ -22,6 +22,8 @@ async function saveAppointment(appointmentData) {
   try {
     const docRef = await addDoc(collection(db, "appointments"), appointmentData);
     console.log("Programarea a fost salvată cu ID: ", docRef.id);
+    // Redirecționează utilizatorul către vp.html
+    window.location.href = "vp.html"; // Redirecționare
   } catch (e) {
     console.error("Eroare la salvarea programării: ", e);
   }
@@ -40,6 +42,4 @@ document.getElementById('appointmentForm').addEventListener('submit', async (e) 
   };
 
   await saveAppointment(appointmentData);
-  alert("Programarea a fost trimisă cu succes!");
-  document.getElementById('appointmentForm').reset(); // Resetează formularul
 });
