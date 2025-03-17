@@ -1,0 +1,188 @@
+/* Resetare stiluri implicite */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Gri deschis */
+    color: #333; /* Text gri închis */
+}
+
+/* Stiluri pentru bara de navigare */
+.navbar {
+    display: flex;
+    align-items: center; /* Aliniere verticală */
+    justify-content: space-between; /* Spațiu între butoanele din stânga și dreapta */
+    background-color: #e0f7fa; /* Fundal deschis, calm */
+    padding: 10px; /* Spațiu interior */
+    position: fixed; /* Rămâne pe ecran */
+    top: 0; /* Poziția de sus */
+    left: 0; /* Poziția de la stânga */
+    width: 100%; /* Lățimea completă */
+    z-index: 1000; /* Deasupra altor elemente */
+}
+
+.nav-buttons-left, .nav-buttons-right {
+    display: flex; /* Afișează butoanele în linie */
+}
+
+.nav-button {
+    margin-right: 10px; /* Spațiu între butoane */
+}
+
+.nav-button img {
+    width: 40px; /* Lățimea iconului */
+    height: 40px; /* Înălțimea iconului */
+}
+
+/* Stil pentru iconul din mijloc */
+.nav-icon {
+    width: 50px; /* Lățimea iconului */
+    height: 50px; /* Înălțimea iconului */
+    margin: 0 20px; /* Spațiu pe laterale */
+}
+
+/* Stiluri pentru container */
+.container {
+    max-width: 800px;
+    margin: 80px auto; /* Spațiu pentru bara de navigare */
+    padding: 20px;
+    background-color: #fff; /* Fundal alb pentru container */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Stiluri pentru titluri */
+h1, h2 {
+    color: #2c3e50; /* Bleumarin închis */
+}
+
+/* Stiluri pentru secțiuni */
+.section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd; /* Gri deschis pentru margine */
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Fundal gri deschis pentru secțiuni */
+}
+
+/* Stiluri pentru etichete */
+.label {
+    font-weight: bold;
+}
+
+/* Stiluri pentru inputuri și selecturi */
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; /* Gri deschis pentru margini */
+    border-radius: 4px;
+}
+
+/* Stiluri pentru butoane */
+button {
+    background-color: #d4af37; /* Auriu */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #b5942a; /* Auriu mai închis la hover */
+}
+
+/* Stiluri pentru focus */
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #2c3e50; /* Bleumarin închis la focus */
+    outline: none; /* Elimină conturul implicit */
+}
+
+/* Stiluri pentru tabel */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #2c3e50; /* Bleumarin închis pentru margini */
+}
+
+th {
+    background-color: #2c3e50; /* Bleumarin închis pentru antet */
+    color: white; /* Text alb pentru antet */
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Fundal gri deschis pentru rânduri pare */
+}
+
+tr:hover {
+    background-color: #d4af37; /* Auriu la hover pentru rânduri */
+}
+
+/* Stiluri pentru fereastra modală */
+.modal {
+    display: none; /* Ascuns implicit */
+    position: fixed; /* Rămâne pe ecran */
+    z-index: 1; /* Deasupra altor elemente */
+    left: 0;
+    top: 0;
+    width: 100%; /* Lățimea completă */
+    height: 100%; /* Înălțimea completă */
+    overflow: auto; /* Permite derularea dacă este necesar */
+    background-color: rgba(0, 0, 0, 0.4); /* Fundal semi-transparent */
+}
+
+.modal-content {
+    background-color: #fefefe; /* Fundal alb pentru conținutul modal */
+    margin: 15% auto; /* Poziționare centrală */
+    padding: 20px;
+    border: 1px solid #888; /* Margine gri */
+    width: 80%; /* Lățimea modalului */
+    border-radius: 8px; /* Colțuri rotunjite */
+}
+
+.close {
+    color: #aaa; /* Gri deschis pentru butonul de închidere */
+    float: right; /* Poziționare în colțul din dreapta sus */
+    font-size: 28px; /* Dimensiune mare pentru buton */
+    font-weight: bold; /* Text îngroșat */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Negru la hover sau focus */
+    text-decoration: none; /* Elimină sublinierea */
+    cursor: pointer; /* Cursor pointer la hover */
+}
+
+/* Ascunde elementele la imprimare */
+@media print {
+    .navbar, .print-button {
+        display: none; /* Ascunde bara de navigare și butonul de imprimare la imprimare */
+    }
+    .modal-content {
+        width: 100%; /* Lățimea completă pentru imprimare */
+        margin: 0; /* Elimină marginea */
+        box-shadow: none; /* Elimină umbra */
+    }
+    .document {
+        box-shadow: none; /* Elimină umbra pentru documentul imprimat */
+    }
+}

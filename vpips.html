@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizualizare Pacienți Internați</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link către fișierul CSS -->
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* Spațiu între butoanele din stânga și dreapta */
+            background-color: #e0f7fa; /* Fundal deschis, calm */
+            padding: 10px; /* Spațiu interior */
+            position: fixed; /* Rămâne pe ecran */
+            top: 0; /* Poziția de sus */
+            left: 0; /* Poziția de la stânga */
+            width: 100%; /* Lățimea completă */
+            z-index: 1000; /* Deasupra altor elemente */
+        }
+
+        .nav-buttons-left, .nav-buttons-right {
+            display: flex; /* Afișează butoanele în linie */
+        }
+
+        .nav-button {
+            margin-right: 10px; /* Spațiu între butoane */
+        }
+
+        .nav-icon {
+            width: 30px; /* Lățimea iconului */
+            height: 30px; /* Înălțimea iconului */
+        }
+
+        .container {
+            margin-top: 60px; /* Spațiu pentru a evita suprapunerea cu bara de navigare */
+        }
+
+        .modal {
+            display: none; /* Ascuns implicit */
+            position: fixed; /* Rămâne în aceeași poziție */
+            z-index: 1; /* Deasupra altor elemente */
+            left: 0;
+            top: 0;
+            width: 100%; /* Lățimea completă */
+            height: 100%; /* Înălțimea completă */
+            overflow: auto; /* Permite derularea dacă este necesar */
+            background-color: rgb(0,0,0); /* Fundal negru */
+            background-color: rgba(0,0,0,0.4); /* Fundal negru cu transparență */
+        }
+
+        .modal-content {
+            background-color: #fefefe; /* Fundal alb pentru conținutul modal */
+            margin: 5% auto; /* Poziționare centrală */
+            padding: 20px;
+            border: 1px solid #888; /* Margine gri */
+            width: 80%; /* Lățimea modalului */
+            border-radius: 8px; /* Colțuri rotunjite */
+            max-height: 90vh; /* Maximează înălțimea modalului */
+            overflow-y: auto; /* Permite derularea pe verticală */
+        }
+
+        .document {
+            width: 210mm; /* Lățimea A4 */
+            min-height: 297mm; /* Înălțimea A4 */
+            padding: 20mm; /* Spațiu interior */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Umbră pentru efect de document */
+            margin: auto; /* Centrare */
+            background-color: #fff; /* Fundal alb */
+            font-family: Arial, sans-serif; /* Fontul documentului */
+        }
+
+        .header {
+            text-align: center; /* Centrare text */
+            margin-bottom: 20px; /* Spațiu sub header */
+        }
+
+        .header h2 {
+            margin: 0; /* Elimină marginea */
+            font-size: 28px; /* Dimensiunea fontului pentru numele spitalului */
+        }
+
+        .header p {
+            margin: 5px 0; /* Spațiu între paragrafe */
+            font-size: 16px; /* Dimensiunea fontului pentru adresa și telefon */
+        }
+
+        .details {
+            margin-top: 20px; /* Spațiu deasupra detaliilor pacientului */
+            font-size: 16px; /* Dimensiunea fontului pentru detalii */
+        }
+
+        .details p {
+            margin: 10px 0; /* Spațiu între paragrafele detaliilor */
+        }
+
+        .print-button {
+            margin-top: 20px; /* Spațiu deasupra butonului de imprimare */
+            text-align: center; /* Centrare buton */
+        }
+
+        .print-button button {
+            padding: 10px 20px; /* Spațiu interior pentru buton */
+            font-size: 16px; /* Dimensiunea fontului pentru buton */
+            background-color: #4CAF50; /* Culoare de fundal verde */
+            color: white; /* Culoare text */
+            border: none; /* Fără margine */
+            border-radius: 5px; /* Colțuri rotunjite */
+            cursor: pointer; /* Cursor pointer */
+        }
+
+        .print-button button:hover {
+            background-color: #45a049; /* Culoare la hover */
+        }
+
+        @media print {
+            .navbar, .print-button {
+                display: none; /* Ascunde bara de navigare și butonul de imprimare la imprimare */
+            }
+            .modal-content {
+                width: 100%; /* Lățimea completă pentru imprimare */
+                margin: 0; /* Elimină marginea */
+                box-shadow: none; /* Elimină umbra */
+            }
+            .document {
+                box-shadow: none; /* Elimină umbra pentru documentul imprimat */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bara de navigare -->
+    <div class="navbar">
+        <div class="nav-buttons-left">
+            <a href="reteta.html" class="nav-button">
+                <img src="2.png" alt="Introducere Rețetă">
+            </a>
+            <a href="internare.html" class="nav-button">
+                <img src="3.png" alt="Internare Pacient">
+            </a>
+        </div>
+        <a href="welcome.html" class="nav-button">
+            <img src="icon.png" alt="Home" class="nav-icon">
+        </a>
+        <div class="nav-buttons-right">
+            <a href="vpcre.html" class="nav-button">
+                <img src="1.png" alt="Vizualizare Pacienți cu Rețetă Eliberată">
+            </a>
+            <a href="vpips.html" class="nav-button">
+                <img src="4.png" alt="Vizualizare Pacienți Internați">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Pacienți Internați</h1>
+        <table id="internatiTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nume Pacient</th>
+                    <th>CNP</th>
+                    <th>Data Internării</th>
+                    <th>Acțiune</th>
+                </tr>
+            </thead>
+            <tbody id="internatiBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Fereastra modală -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody" class="document">
+                <!-- Detaliile pacientului vor fi adăugate aici din JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simularea datelor pacienților în localStorage
+        const internati = JSON.parse(localStorage.getItem('internati')) || [
+            {
+                cod: '1',
+                nume: 'Ion Popescu',
+                cnp: '1234567890123',
+                dataNasterii: '01-01-1980',
+                domiciliu: 'București',
+                telefon: '0712345678',
+                ciPasaport: 'AB123456',
+                asigurare: 'CNAS',
+                sex: 'M',
+                grupaSange: 'A',
+                rh: '+',
+                motivInternare: 'Control medical',
+                istoricMedical: 'Diabet',
+                statusPacient: 'Stabil',
+                puls: '72',
+                tensiune: '120/80',
+                temperatura: '36.6',
+                saturatieO2: '98%',
+                stareGenerala: 'Bună',
+                sectieInternare: 'Cardiologie',
+                tipInternare: 'Programată',
+                medic: 'Dr. Maria Ionescu',
+                asistent: 'Asist. Ana Georgescu'
+            },
+            // Adaugă mai mulți pacienți după cum este necesar
+        ];
+
+        const internatiBody = document.getElementById('internatiBody');
+
+        if (internati.length > 0) {
+            internati.forEach(pacient => {
+                internatiBody.innerHTML += `
+                    <tr>
+                        <td>${pacient.cod}</td>
+                        <td>${pacient.nume}</td>
+                        <td>${pacient.cnp}</td>
+                        <td>${pacient.dataNasterii}</td>
+                        <td><button onclick="veziDetalii('${pacient.cod}')">Vezi Detalii</button></td>
+                    </tr>
+                `;
+            });
+        } else {
+            internatiBody.innerHTML = '<tr><td colspan="5">Nu există pacienți internați.</td></tr>';
+        }
+
+        function veziDetalii(cod) {
+            const pacient = internati.find(p => p.cod === cod);
+            if (pacient) {
+                const modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = `
+                    <div class="header">
+                        <h2>Spitalul Sf. Maria</h2>
+                        <p>Str. Exemplu, Nr. 123</p>
+                        <p>Email: contact@spitalulsfmaria.ro</p>
+                        <p>Telefon: 0123 456 789</p>
+                    </div>
+                    <div class="details">
+                        <h2 style="text-align: center;">Detalii Pacient</h2>
+                        <p><strong>Nume și prenume:</strong> ${pacient.nume}</p>
+                        <p><strong>CNP:</strong> ${pacient.cnp}</p>
+                        <p><strong>Data nașterii:</strong> ${pacient.dataNasterii}</p>
+                        <p><strong>Domiciliu:</strong> ${pacient.domiciliu}</p>
+                        <p><strong>Număr de telefon:</strong> ${pacient.telefon}</p>
+                        <p><strong>Serie și număr CI/pașaport:</strong> ${pacient.ciPasaport}</p>
+                        <p><strong>Asigurare medicală:</strong> ${pacient.asigurare}</p>
+                        <p><strong>Sex:</strong> ${pacient.sex}</p>
+                        <p><strong>Grupa de sânge:</strong> ${pacient.grupaSange}</p>
+                        <p><strong>Rh:</strong> ${pacient.rh}</p>
+                        <p><strong>Motivul internării:</strong> ${pacient.motivInternare}</p>
+                        <p><strong>Istoric medical:</strong> ${pacient.istoricMedical}</p>
+                        <p><strong>Statusul pacientului la internare:</strong> ${pacient.statusPacient}</p>
+                        <p><strong>Puls:</strong> ${pacient.puls}</p>
+                        <p><strong>Tensiune arterială:</strong> ${pacient.tensiune}</p>
+                        <p><strong>Temperatură:</strong> ${pacient.temperatura}</p>
+                        <p><strong>Saturație O2:</strong> ${pacient.saturatieO2}</p>
+                        <p><strong>Starea generală:</strong> ${pacient.stareGenerala}</p>
+                        <p><strong>Secția:</strong> ${pacient.sectieInternare}</p>
+                        <p><strong>Tipul internării:</strong> ${pacient.tipInternare}</p>
+                        <p><strong>Medicul:</strong> ${pacient.medic}</p>
+                        <p><strong>Asistentul:</strong> ${pacient.asistent}</p>
+                    </div>
+                    <div class="print-button">
+                        <button onclick="window.print()">Imprimare Fişă</button>
+                    </div>
+                    <img src="stampila.png" alt="Stampila" style="display: block; margin: 20px auto; width: 100px;"/> <!-- Adăugarea stampilei -->
+                `;
+                document.getElementById('myModal').style.display = "block"; // Afișează fereastra modală
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        // Închide fereastra modală dacă utilizatorul face clic în afara acesteia
+        window.onclick = function(event) {
+            const modal = document.getElementById('myModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html>

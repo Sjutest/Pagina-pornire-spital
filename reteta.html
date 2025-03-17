@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducere Rețetă</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link către fișierul CSS -->
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="nav-buttons-left">
+            <a href="reteta.html" class="nav-button">
+                <img src="2.png" alt="Introducere Rețetă">
+            </a>
+            <a href="internare.html" class="nav-button">
+                <img src="3.png" alt="Internare Pacient">
+            </a>
+        </div>
+        <a href="welcome.html" class="nav-button">
+            <img src="icon.png" alt="Home" class="nav-icon">
+        </a>
+        <div class="nav-buttons-right">
+            <a href="vpcre.html" class="nav-button">
+                <img src="1.png" alt="Vizualizare Pacienți cu Rețetă Eliberată">
+            </a>
+            <a href="vpips.html" class="nav-button">
+                <img src="4.png" alt="Vizualizare Pacienți Internați">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Introducere Rețetă Medicală</h1>
+        <div class="section">
+            <h2>Datele medicului prescriptor</h2>
+            <p><span class="label">Selectați medic:</span>
+                <select id="medicNume"></select>
+            </p>
+            <p><span class="label">Specialitate:</span> <input type="text" id="medicSpecialitate"></p>
+            <p><span class="label">Cod parafă:</span> <input type="text" id="medicCod"></p>
+        </div>
+
+        <div class="section">
+            <h2>Datele pacientului</h2>
+            <p><span class="label">Nume și prenume:</span> <input type="text" id="pacientNume"></p>
+            <p><span class="label">CNP:</span> <input type="text" id="pacientCNP"></p>
+            <p><span class="label">Secție:</span>
+                <select id="sectieSelect"></select>
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Detalii despre rețetă</h2>
+            <p><span class="label">Data eliberării:</span> <input type="date" id="dataEliberare"></p>
+            <p><span class="label">Tipul rețetei:</span>
+                <select id="tipReteta">
+                    <option value="compensata">Compensată</option>
+                    <option value="gratuita">Gratuită</option>
+                    <option value="plataintegrala">Cu plată integrală</option>
+                </select>
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Medicamente prescrise</h2>
+            <table id="medicamenteTable">
+                <thead>
+                    <tr>
+                        <th>Denumire Medicament</th>
+                        <th>Forma Farmaceutică</th>
+                        <th>Concentrație</th>
+                        <th>Doza</th>
+                        <th>Cantitate</th>
+                    </tr>
+                </thead>
+                <tbody id="medicamenteBody"></tbody>
+            </table>
+            <button id="adaugaMedicament">Adaugă Medicament</button>
+        </div>
+
+        <button id="salveaza">Salvează Rețeta</button>
+    </div>
+
+    <script>
+        // Generate a random ID of 8 characters
+        function generateRandomID() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        // Populate doctor select
+        const medicSelect = document.getElementById('medicNume');
+        const doctori = JSON.parse(localStorage.getItem('doctori')) || [];
+        doctori.forEach(doctor => {
+            const option = document.createElement('option');
+            option.value = doctor.nume; // Assuming doctor has a 'nume' property
+            option.textContent = doctor.nume; // Display name
+            medicSelect.appendChild(option);
+        });
+
+        // Populate sectie select
+        const sectieSelect = document.getElementById('sectieSelect');
+        const sectii = JSON.parse(localStorage.getItem('sectii')) || [];
+        sectii.forEach(sectie => {
+            const option = document.createElement('option');
+            option.value = sectie; // Assuming sectia is a string
+            option.textContent = sectie; // Display name
+            sectieSelect.appendChild(option);
+        });
+
+        document.getElementById('adaugaMedicament').onclick = function() {
+            const denumire = prompt("Introduceți denumirea medicamentului:");
+            const forma = prompt("Introduceți forma farmaceutică:");
+            const concentratie = prompt("Introduceți concentrația:");
+            const doza = prompt("Introduceți doza:");
+            const cantitate = prompt("Introduceți cantitatea:");
+
+            if (denumire && forma && concentratie && doza && cantitate) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${denumire}</td>
+                    <td>${forma}</td>
+                    <td>${concentratie}</td>
+                    <td>${doza}</td>
+                    <td>${cantitate}</td>
+                `;
+                document.getElementById('medicamenteBody').appendChild(row);
+            } else {
+                alert ('Vă rugăm să completați toate câmpurile medicamentului.');
+            }
+        };
+
+        document.getElementById('salveaza').onclick = function() {
+            const medicNume = medicSelect.value; // Get selected doctor name
+            const medicSpecialitate = document.getElementById('medicSpecialitate').value;
+            const medicCod = document.getElementById('medicCod').value;
+            const pacientNume = document.getElementById('pacientNume').value;
+            const pacientCNP = document.getElementById('pacientCNP').value;
+            const sectie = sectieSelect.value; // Get selected section
+            const dataEliberare = document.getElementById('dataEliberare').value;
+            const tipReteta = document.getElementById('tipReteta').value;
+
+            const medicamente = [];
+            const rows = document.querySelectorAll('#medicamenteBody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                medicamente.push({
+                    denumire: cells[0].innerText,
+                    forma: cells[1].innerText,
+                    concentratie: cells[2].innerText,
+                    doza: cells[3].innerText,
+                    cantitate: cells[4].innerText
+                });
+            });
+
+            const reteta = {
+                id: generateRandomID(), // Generate a unique ID
+                medicNume,
+                medicSpecialitate,
+                medicCod,
+                pacientNume,
+                pacientCNP,
+                sectie,
+                dataEliberare,
+                tipReteta,
+                medicamente
+            };
+
+            const retete = JSON.parse(localStorage.getItem('retete')) || [];
+            retete.push(reteta);
+            localStorage.setItem('retete', JSON.stringify(retete));
+            alert('Rețeta a fost salvată cu succes!');
+        };
+    </script>
+</body>
+</html>

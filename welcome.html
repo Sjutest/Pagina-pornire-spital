@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Spitalul nostru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .navbar {
+            position: fixed; /* Rămâne pe ecran */
+            top: 0; /* Poziția de sus */
+            left: 0; /* Poziția de la stânga */
+            width: 100%; /* Lățimea completă */
+            background-color: #e0f7fa; /* Fundal deschis, calm */
+            border-bottom: 1px solid #b2ebf2; /* Linia de separare */
+            display: flex; /* Flexbox pentru aliniere */
+            justify-content: center; /* Centrare orizontală */
+            align-items: center; /* Centrare verticală */
+            padding: 10px 0; /* Spațiu interior */
+            z-index: 1000; /* Deasupra altor elemente */
+        }
+
+        .nav-icon {
+            width: 30px; /* Lățimea iconului */
+            height: 30px; /* Înălțimea iconului */
+        }
+
+        .button-admin {
+            background-color: #ffcc80; /* Culoare mai caldă pentru buton */
+            color: #000; /* Text negru */
+        }
+
+        .button-admin:hover {
+            background-color: #ffb74d; /* Culoare mai închisă la hover */
+        }
+
+        .action-button {
+            background-color: #4db6ac; /* Culoare calmă pentru butoane */
+            color: white; /* Text alb */
+            padding: 12px 20px; /* Spațiu interior */
+            border-radius: 8px; /* Colțuri rotunjite */
+            transition: background-color 0.3s; /* Tranziție pentru hover */
+            display: block; /* Fiecare buton pe o linie separată */
+            text-align: center; /* Centrare text */
+            font-weight: bold; /* Text îngroșat */
+        }
+
+        .action-button:hover {
+            background-color: #009688; /* Culoare mai închisă la hover */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+    <div class="navbar">
+        <a href="welcome.html">
+            <img src="icon.png" alt="Home" class="nav-icon"> <!-- Iconul care redirecționează -->
+        </a>
+    </div>
+
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full">
+        <div class="relative">
+            <button onclick="verificaCod()" class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full button-admin px-2 py-1 rounded-full text-sm">
+                Acces Administrator
+            </button>
+            <img alt="Hospital building icon" class="mx-auto mb-4 mt-6" height="100" src="https://storage.googleapis.com/a1aa/image/6anEXQTfXMRuH865KNJfXYI1sYByAqbTT5RBXZSyzzY.jpg" width="100"/>
+        </div>
+        <h1 class="text-2xl font-bold mb-2 text-teal-600">
+            Bun Venit la Spitalul nostru!
+        </h1>
+        <p class="text-gray-700 mb-4">
+            Acesta este un sistem de gestionare a rețetelor și internărilor pentru pacienți. Vă rugăm să selectați una dintre opțiunile de mai jos:
+        </p>
+        <div class="space-y-2">
+            <a href="reteta.html" class="action-button">Introducere Rețetă</a>
+            <a href="internare.html" class="action-button">Internare Pacient</a>
+            <a href="vpips.html" class="action-button">Vizualizare Pacienți Internați</a>
+            <a href="vpcre.html" class="action-button">Vizualizare Pacienți cu Rețetă Eliberată</a>
+        </div>
+    </div>
+
+    <script>
+        function verificaCod() {
+            const codSpecial = prompt("Introduceți codul special pentru acces:");
+            const codCorect = "ADMINSJU2025"; // Codul corect
+
+            if (codSpecial === codCorect) {
+                window.location.href = "administrator.html"; // Redirecționează către pagina de administrator
+            } else {
+                alert("Codul introdus este incorect. Acces refuzat.");
+            }
+        }
+    </script>
+
+</body>
+</html>

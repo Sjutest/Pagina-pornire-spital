@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrare Date</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link către fișierul CSS -->
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="nav-buttons-left">
+            <a href="reteta.html" class="nav-button">
+                <img src="2.png" alt="Introducere Rețetă">
+            </a>
+            <a href="internare.html" class="nav-button">
+                <img src="3.png" alt="Internare Pacient">
+            </a>
+        </div>
+        <a href="welcome.html" class="nav-button">
+            <img src="icon.png" alt="Home" class="nav-icon">
+        </a>
+        <div class="nav-buttons-right">
+            <a href="vpcre.html" class="nav-button">
+                <img src="1.png" alt="Vizualizare Pacienți cu Rețetă Eliberată">
+            </a>
+            <a href="vpips.html" class="nav-button">
+                <img src="4.png" alt="Vizualizare Pacienți Internați">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Administrare Doctori, Asistenți și Secții</h1>
+
+        <div class="section">
+            <h2>Caută Pacient</h2>
+            <input type="text" id="cautarePacient" placeholder="Caută pacient după nume">
+            <button id="cautaPacient">Caută</button>
+            <button id="vizualizeazaPacienti" style="display: none;">Vizualizează Toți Pacienții</button>
+            <button id="restrangePacienti" style="display: none;">Restrânge</button>
+        </div>
+
+        <div class="section">
+            <h2>Pacienți Internați</h2>
+            <table id="pacientiTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Cod Pacient</th>
+                        <th>Nume Pacient</th>
+                        <th>Acțiune</th>
+                    </tr>
+                </thead>
+                <tbody id="pacientiBody"></tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Rețete Eliberate</h2>
+            <input type="text" id="cautareReteta" placeholder="Caută rețetă după nume pacient">
+            <button id="cautaReteta">Caută</button>
+            <button id="vizualizeazaRetete" style="display: none;">Vizualizează Toate Rețetele</button>
+            <button id="restrangeRetete" style="display: none;">Restrânge</button>
+            <table id="reteteTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Nume Medicament</th>
+                        <th>Pacient</th>
+                        <th>Data Eliberării</th>
+                        <th>Acțiune</th>
+                    </tr>
+                </thead>
+                <tbody id="reteteBody"></tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Doctori</h2>
+            <table id="doctoriTable">
+                <thead>
+                    <tr>
+                        <th>Nume Doctor</th>
+                        <th>Secție</th>
+                        <th>Acțiune</th>
+                    </tr>
+                </thead>
+                <tbody id="doctoriBody"></tbody>
+            </table>
+            <p><span class="label">Nume și prenume:</span> <input type="text" id="doctorNume"></p>
+            <p><span class="label">Secție:</span> <input type="text" id="doctorSectie"></p>
+            <button id="adaugaDoctor">Adaugă Doctor</button>
+        </div>
+
+        <div class="section">
+            <h2>Asistenți</h2>
+            <table id="asistentiTable">
+                <thead>
+                    <tr>
+                        <th>Nume Asistent</th>
+                        <th>Secție</th>
+                        <th>Acțiune</th>
+                    </tr>
+                </thead>
+                <tbody id="asistentiBody"></tbody>
+            </table>
+            <p><span class="label">Nume și prenume:</span> <input type="text" id="asistentNume"></p>
+            <p><span class="label">Secție:</span> <input type="text" id="asistentSectie"></p>
+            <button id="adaugaAsistent">Adaugă Asistent</button>
+        </div>
+
+        <div class="section">
+            <h2>Secții</h2>
+            <table id="sectiiTable">
+                <thead>
+                    <tr>
+                        <th>Nume Secție</th>
+                        <th>Acțiune</th>
+                    </tr>
+                </thead>
+                <tbody id="sectiiBody"></tbody>
+            </table>
+            <input type="text" id="numeSectie" placeholder="Introduceți numele secției">
+            <button id="adaugaSectie">Adaugă Secție</button>
+        </div>
+    </div>
+
+    <script>
+        // Funcție pentru actualizarea tabelului pacienților internați
+        function updatePacientiTable() {
+            const pacientiBody = document.getElementById('pacientiBody');
+            pacientiBody.innerHTML = ''; // Curățăm rândurile existente
+
+            const pacienti = JSON.parse(localStorage.getItem('internati')) || [];
+            pacienti.forEach(pacient => {
+                pacientiBody.innerHTML += `
+                    <tr>
+                        <td>${pacient.cod}</td>
+                        <td>${pacient.nume}</td>
+                        <td><button onclick="stergePacient('${pacient.cod}')">Șterge</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Funcție pentru căutarea pacienților
+        document.getElementById('cautaPacient').onclick = function() {
+            const numeCautat = document.getElementById('cautarePacient').value.toLowerCase();
+            const pacientiBody = document.getElementById('pacientiBody');
+            pacientiBody.innerHTML = ''; // Curățăm rândurile existente
+
+            const pacienti = JSON.parse(localStorage.getItem('internati')) || [];
+            const pacientiGasiti = pacienti.filter(pacient => pacient.nume.toLowerCase().includes(numeCautat));
+
+            pacientiGasiti.forEach(pacient => {
+                pacientiBody.innerHTML += `
+                    <tr>
+                        <td>${pacient.cod}</td>
+                        <td>${pacient.nume}</td>
+                        <td><button onclick="stergePacient('${pacient.cod}')">Șterge</button></td>
+                    </tr>
+                `;
+            });
+
+            // Afișează tabelul dacă au fost găsiți pacienți
+            document.getElementById('pacientiTable').style.display = pacientiGasiti.length > 0 ? 'table' : 'none';
+            document.getElementById('vizualizeazaPacienti').style.display = pacientiGasiti.length > 0 ? 'none' : 'inline';
+            document.getElementById('restrangePacienti').style.display = pacientiGasiti.length > 0 ? 'inline' : 'none';
+        };
+
+        // Funcție pentru vizualizarea tuturor pacienților
+        document.getElementById('vizualizeazaPacienti').onclick = function() {
+            updatePacientiTable();
+            document.getElementById('pacientiTable').style.display = 'table';
+            this.style.display = 'none';
+            document.getElementById('restrangePacienti').style.display = 'inline';
+        };
+
+        // Funcție pentru restrângerea tabelului pacienților
+        document.getElementById('restrangePacienti').onclick = function() {
+            document.getElementById('pacientiTable').style.display = 'none';
+            this.style.display = 'none';
+            document.getElementById('vizualizeazaPacienti').style.display = 'inline';
+        };
+
+        // Funcție pentru ștergerea unui pacient
+        function stergePacient(cod) {
+            let pacienti = JSON.parse(localStorage.getItem('internati')) || [];
+            pacienti = pacienti.filter(pacient => pacient.cod !== cod);
+            localStorage.setItem('internati', JSON.stringify(pacienti));
+            alert('Pacientul a fost șters!');
+            updatePacientiTable();
+        }
+
+        // Funcție pentru actualizarea tabelului rețetelor eliberate
+        function updateReteteTable() {
+            const reteteBody = document.getElementById('reteteBody');
+            reteteBody.innerHTML = ''; // Curățăm rândurile existente
+
+            const retete = JSON.parse(localStorage.getItem('retete')) || [];
+            retete.forEach(reteta => {
+                reteteBody.innerHTML += `
+                    <tr>
+                        <td>${reteta.medicament}</td>
+                        <td>${reteta.pacient}</td>
+                        <td>${reteta.data}</td>
+                        <td><button onclick="stergeReteta('${reteta.medicament}')">Șterge</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Funcție pentru căutarea rețetelor
+        document.getElementById('cautaReteta').onclick = function() {
+            const numeCautat = document.getElementById('cautareReteta').value.toLowerCase();
+            const reteteBody = document.getElementById('reteteBody');
+            reteteBody.innerHTML = ''; // Curățăm rândurile existente
+
+            const retete = JSON.parse(localStorage.getItem('retete')) || [];
+            const reteteGasite = retete.filter(reteta => reteta.pacient.toLowerCase().includes(numeCautat));
+
+            reteteGasite.forEach(reteta => {
+                reteteBody.innerHTML += `
+                    <tr>
+                        <td>${reteta.medicament}</td>
+                        <td>${reteta.pacient}</td>
+                        <td>${reteta.data}</td>
+                        <td><button onclick="stergeReteta('${reteta.medicament}')">Șterge</button></td>
+                    </tr>
+                `;
+            });
+
+            // Afișează tabelul dacă au fost găsite rețete
+            document.getElementById('reteteTable').style.display = reteteGasite.length > 0 ? 'table' : 'none';
+            document.getElementById('vizualizeazaRetete').style.display = reteteGasite.length > 0 ? 'none' : 'inline';
+            document.getElementById('restrangeRetete').style.display = reteteGasite.length > 0 ? 'inline' : 'none';
+        };
+
+        // Funcție pentru vizualizarea tuturor rețetelor
+        document.getElementById('vizualizeazaRetete').onclick = function() {
+            updateReteteTable();
+            document.getElementById('reteteTable').style.display = 'table';
+            this.style.display = 'none';
+            document.getElementById('restrangeRetete').style.display = 'inline';
+        };
+
+        // Funcție pentru restrângerea tabelului rețetelor
+        document.getElementById('restrangeRetete').onclick = function() {
+            document.getElementById('reteteTable').style.display = 'none';
+            this.style.display = 'none';
+            document.getElementById('vizualizeazaRetete').style.display = 'inline';
+        };
+
+        // Funcție pentru ștergerea unei rețete
+        function stergeReteta(medicament) {
+            let retete = JSON.parse(localStorage.getItem('retete')) || [];
+            retete = retete.filter(reteta => reteta.medicament !== medicament);
+            localStorage.setItem('retete', JSON.stringify(retete));
+            alert('Rețeta a fost ștearsă!');
+            updateReteteTable();
+        }
+
+        // Funcție pentru actualizarea tabelului doctorilor
+        function updateDoctoriTable() {
+            const doctoriBody = document.getElementById('doctoriBody');
+            doctoriBody.innerHTML = ''; // Curățăm rândurile existente
+
+            const doctori = JSON.parse(localStorage.getItem('doctori')) || [];
+            doctori.forEach((doctor, index) => {
+                doctoriBody.innerHTML += `
+                    <tr>
+                        <td>${doctor.nume}</td>
+                        <td>${doctor.sectie}</td>
+                        <td><button onclick="stergeDoctor(${index})">Șterge</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Funcție pentru ștergerea unui doctor
+        function stergeDoctor(index) {
+            let doctori = JSON.parse(localStorage.getItem('doctori')) || [];
+            doctori.splice(index, 1); // Eliminăm doctorul din array
+            localStorage.setItem('doctori', JSON.stringify(doctori));
+            alert('Doctorul a fost șters!');
+            updateDoctoriTable(); // Actualizăm tabelul doctorilor
+        }
+
+        // Funcție pentru actualizarea tabelului asistenților
+        function updateAsistentiTable() {
+            const asistentiBody = document.getElementById('asistentiBody');
+            asistentiBody.innerHTML = ''; // Curățăm rândurile existente
+
+            const asistenti = JSON.parse(localStorage.getItem('asistenti')) || [];
+            asistenti.forEach((asistent, index) => {
+                asistentiBody.innerHTML += `
+                    <tr>
+                        <td>${asistent.nume}</td>
+                        <td>${asistent.sectie}</td>
+                        <td><button onclick="stergeAsistent(${index})">Șterge</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Funcție pentru ștergerea unui asistent
+        function stergeAsistent(index) {
+            let asistenti = JSON.parse(localStorage.getItem('asistenti')) || [];
+            asistenti.splice(index, 1); // Eliminăm asistentul din array
+            localStorage.setItem('asistenti', JSON.stringify(asistenti));
+            alert('Asistentul a fost șters!');
+            updateAsistentiTable(); // Actualizăm tabelul asistenților
+        }
+
+        // Adăugare Doctor
+        document.getElementById('adaugaDoctor').onclick = function() {
+            const doctorNume = document.getElementById('doctorNume').value.trim();
+            const doctorSectie = document.getElementById('doctorSectie').value.trim();
+            if (doctorNume && doctorSectie) {
+                let doctori = JSON.parse(localStorage.getItem('doctori')) || [];
+                doctori.push({ nume: doctorNume, sectie: doctorSectie });
+                localStorage.setItem('doctori', JSON.stringify(doctori));
+                alert('Doctorul a fost adăugat!');
+                document.getElementById('doctorNume').value = '';
+                document.getElementById('doctorSectie').value = '';
+                updateDoctoriTable();
+            } else {
+                alert('Vă rugăm să introduceți un nume și o secție valide.');
+            }
+        };
+
+        // Adăugare Asistent
+        document.getElementById('adaugaAsistent').onclick = function() {
+            const asistentNume = document.getElementById('asistentNume').value.trim();
+            const asistentSectie = document.getElementById('asistentSectie').value.trim();
+            if (asistentNume && asistentSectie) {
+                let asistenti = JSON.parse(localStorage.getItem('asistenti')) || [];
+                asistenti.push({ nume: asistentNume, sectie: asistentSectie });
+                localStorage.setItem('asistenti ', JSON.stringify(asistenti));
+                alert('Asistentul a fost adăugat!');
+                document.getElementById('asistentNume').value = '';
+                document.getElementById('asistentSectie').value = '';
+                updateAsistentiTable();
+            } else {
+                alert('Vă rugăm să introduceți un nume și o secție valide.');
+            }
+        };
+
+        // Adăugare Secție
+        document.getElementById('adaugaSectie').onclick = function() {
+            const numeSectie = document.getElementById('numeSectie').value.trim();
+            if (numeSectie) {
+                let sectii = JSON.parse(localStorage.getItem('sectii')) || [];
+                sectii.push(numeSectie);
+                localStorage.setItem('sectii', JSON.stringify(sectii));
+                alert('Secția a fost adăugată!');
+                document.getElementById('numeSectie').value = '';
+                updateSectiiTable();
+            } else {
+                alert('Vă rugăm să introduceți un nume valid pentru secție.');
+            }
+        };
+
+        // Funcție pentru actualizarea tabelului secțiilor
+        function updateSectiiTable() {
+            const sectiiBody = document.getElementById('sectiiBody');
+            sectiiBody.innerHTML = ''; // Curățăm rândurile existente
+
+            const sectii = JSON.parse(localStorage.getItem('sectii')) || [];
+            sectii.forEach((sectie, index) => {
+                sectiiBody.innerHTML += `
+                    <tr>
+                        <td>${sectie}</td>
+                        <td><button onclick="stergeSectie(${index})">Șterge</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Funcție pentru ștergerea unei secții
+        function stergeSectie(index) {
+            let sectii = JSON.parse(localStorage.getItem('sectii')) || [];
+            sectii.splice(index, 1); // Eliminăm secția din array
+            localStorage.setItem('sectii', JSON.stringify(sectii));
+            alert('Secția a fost ștearsă!');
+            updateSectiiTable(); // Actualizăm tabelul secțiilor
+        }
+
+        // Inițializare tabele
+        updateDoctoriTable();
+        updateAsistentiTable();
+        updateSectiiTable();
+    </script>
+
+</body>
+</html>

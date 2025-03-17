@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizualizare Pacienți cu Rețetă Eliberată</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link către fișierul CSS -->
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* Spațiu între butoanele din stânga și dreapta */
+            background-color: #e0f7fa; /* Fundal deschis, calm */
+            padding: 10px; /* Spațiu interior */
+            position: fixed; /* Rămâne pe ecran */
+            top: 0; /* Poziția de sus */
+            left: 0; /* Poziția de la stânga */
+            width: 100%; /* Lățimea completă */
+            z-index: 1000; /* Deasupra altor elemente */
+        }
+
+        .nav-buttons-left, .nav-buttons-right {
+            display: flex; /* Afișează butoanele în linie */
+        }
+
+        .nav-button {
+            margin-right: 10px; /* Spațiu între butoane */
+        }
+
+        .nav-icon {
+            width: 30px; /* Lățimea iconului */
+            height: 30px; /* Înălțimea iconului */
+        }
+
+        .container {
+            margin-top: 60px; /* Spațiu pentru a evita suprapunerea cu bara de navigare */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bara de navigare -->
+    <div class="navbar">
+        <div class="nav-buttons-left">
+            <a href="reteta.html" class="nav-button">
+                <img src="2.png" alt="Introducere Rețetă">
+            </a>
+            <a href="internare.html" class="nav-button">
+                <img src="3.png" alt="Internare Pacient">
+            </a>
+        </div>
+        <a href="welcome.html" class="nav-button">
+            <img src="icon.png" alt="Home" class="nav-icon">
+        </a>
+        <div class="nav-buttons-right">
+            <a href="vpcre.html" class="nav-button">
+                <img src="1.png" alt="Vizualizare Pacienți cu Rețetă Eliberată">
+            </a>
+            <a href="vpips.html" class="nav-button">
+                <img src="4.png" alt="Vizualizare Pacienți Internați">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Pacienți cu Rețetă Eliberată</h1>
+        <table id="pacientiTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nume Pacient</th>
+                    <th>CNP</th>
+                    <th>Sectie</th>
+                    <th>Data Eliberării</th>
+                    <th>Tip Rețetă</th>
+                    <th>Acțiune</th>
+                </tr>
+            </thead>
+            <tbody id="pacientiBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Fereastra modală -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const pacienti = JSON.parse(localStorage.getItem('retete')) || [];
+        const pacientiBody = document.getElementById('pacientiBody');
+
+        if (pacienti.length > 0) {
+            pacienti.forEach(reteta => {
+                pacientiBody.innerHTML += `
+                    <tr>
+                        <td>${reteta.id}</td>
+                        <td>${reteta.pacientNume}</td>
+                        <td>${reteta.pacientCNP}</td>
+                        <td>${reteta.sectie}</td>
+                        <td>${reteta.dataEliberare}</td>
+                        <td>${reteta.tipReteta}</td>
+                        <td><button onclick="veziDetalii('${reteta.id}')">Vezi Detalii</button></td>
+                    </tr>
+                `;
+            });
+        } else {
+            pacientiBody.innerHTML = '<tr><td colspan="7">Nu există pacienți salvați.</td></tr>';
+        }
+
+        function veziDetalii(id) {
+            const reteta = pacienti.find(reteta => reteta.id === id);
+            if (reteta) {
+                const modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = `
+                    <h2 style="text-align: center;">Spitalul Județean Krostovic</h2>
+                    <p style="text-align: center;">Krostovic Str. Margaretelor 32</p>
+                    <p style="text-align: center;">Nr. telefon: 0771458234</p>
+                    <hr>
+                    <h3>Detalii pentru pacientul ${reteta.pacientNume}</h3>
+                    <p><strong>CNP:</strong> ${reteta.pacientCNP}</p>
+                    <p><strong>Sectie:</strong> ${reteta.sectie}</p>
+                    <p><strong>Data eliberării:</strong> ${reteta.dataEliberare}</p>
+                    <p><strong>Tip rețetă:</strong> ${reteta.tipReteta}</p>
+                    <p><strong>Medicamente:</strong> ${reteta.medicamente.map(med => med.denumire).join(', ')}</p>
+                `;
+                document.getElementById('myModal').style.display = "block"; // Afișează fereastra modală
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        // Închide fereastra modală dacă utilizatorul face clic în afara acesteia
+        window.onclick = function(event) {
+            const modal = document.getElementById('myModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+    <style>
+        .modal {
+            display: none; /* Ascuns implicit */
+            position: fixed; /* Rămâne în aceeași poziție */
+            z-index: 1; /* Deasupra altor elemente */
+            left: 0;
+            top: 0;
+            width: 100%; /* Lățimea completă */
+            height: 100%; /* Înălțimea completă */
+            overflow: auto; /* Permite derularea dacă este necesar */
+            background-color: rgb(0,0,0); /* Fundal negru */
+            background-color: rgba(0,0,0,0.4); /* Fundal negru cu transparență */
+        }
+
+        .modal-content {
+            background-color: #fefefe; /* Fundal alb pentru conținutul modal */
+            margin: 15% auto; /* Poziționare centrală */
+            padding: 20px;
+            border: 1px solid #888; /* Margine gri */
+            width: 80%; /* Lățimea modalului */
+            border-radius: 8px; /* Colțuri rotunjite */
+            font-size: 14px; /* Dimensiunea textului */
+        }
+
+        .close {
+            color: #aaa; /* Culoarea butonului de închidere */
+            float: right; /* Poziționare în dreapta */
+            font-size: 28px; /* Dimensiunea fontului */
+            font-weight: bold; /* Font îngroșat */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black; /* Culoare la hover */
+            text-decoration: none; /* Fără subliniere */
+            cursor: pointer; /* Cursor pointer */
+        }
+    </style>
+
+</body>
+</html>
