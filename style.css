@@ -20,36 +20,47 @@ form {
     background: #ffffff;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1 );
 }
 
-label {
+form label {
     display: block;
     margin: 10px 0 5px;
 }
 
-input, select {
+form input, form select {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button {
-    background-color: #35424a;
-    color: white;
+    background: #35424a;
+    color: #ffffff;
     border: none;
-    padding: 10px;
+    padding: 10px 15px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #4CAF50;
+    background: #45a049;
 }
 
 #patient-list {
+    margin-top: 20px;
+}
+
+#patients {
+    list-style-type: none;
+    padding: 0;
+}
+
+#patients li {
     background: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
